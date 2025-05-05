@@ -10,8 +10,7 @@ public class Main {
     public static void main(String[] args) {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASS)) {
             if (connection != null) {
-                Statement statement = connection.createStatement();
-                Library library = new Library(statement);
+                Library library = new Library(connection);
             }
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
