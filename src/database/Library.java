@@ -167,6 +167,56 @@ public class Library {
         }
     }
 
+    public void addNewAuthorAndBook(String first_name, String last_name, String title, int  author_id, int published_year) throws SQLException {
+        try{
+            connection.setAutoCommit(false);
+            addNewAuthor(first_name, last_name);
+            addNewBook(title, author_id, published_year);
+            System.out.println("Транзакция успешно завершена!");
+            connection.commit();
+        }
+        catch (Exception e) {
+            System.out.println("Ошибка! Транзакция не выполнена! Откат изменений!");
+            connection.rollback();
+        }
+        finally {
+            connection.setAutoCommit(true);
+        }
+    }
+
+    public List<Books> findBooksByTitle(String bookTitle) throws SQLException {
+        ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM books WHERE title = '%s'", bookTitle));
+        List<Books> list = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String title = resultSet.getString("title");
+            int author_id = resultSet.getInt("author_id");
+            int published_year = resultSet.getInt("published_year");
+            list.add(new Books(id, title, author_id, published_year));
+        }
+        printInfo(list);
+        return list;
+    }
+
+    public List<Books> findBooksByAuthor(String authorFirstName, String authorLastName) throws SQLException {
+        ResultSet resultSet = statement.executeQuery(String.format(
+                "SELECT * " +
+                "FROM books " +
+                "JOIN authors ON books.author_id = authors.id " +
+                "WHERE authors.first_name = '%s' AND authors.last_name = '%s'"
+                , authorFirstName, authorLastName));
+        List<Books> list = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String title = resultSet.getString("title");
+            int author_id = resultSet.getInt("author_id");
+            int published_year = resultSet.getInt("published_year");
+            list.add(new Books(id, title, author_id, published_year));
+        }
+        printInfo(list);
+        return list;
+    }
+
     public <E> void printInfo(List<E> list) {
         for (E element : list) {
             System.out.println(element);
