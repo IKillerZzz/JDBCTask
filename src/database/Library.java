@@ -3,6 +3,7 @@ package database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Library {
     private Connection connection;
@@ -113,6 +114,57 @@ public class Library {
         }
         printInfo(list);
         return list;
+    }
+
+    public void updateBookById(int id) throws SQLException {
+        Scanner scanner = new Scanner(System.in);
+        String title = null;
+        Integer year = null;
+        String updateBookQuery = null;
+
+        System.out.println("Хотите изменить название книги? Введите 'да' или 'нет'");
+        String answerForTitle = scanner.nextLine();
+        if(answerForTitle.equalsIgnoreCase("да")) {
+            System.out.println("Введите новое название книги:");
+            title = scanner.nextLine();
+        }
+
+        System.out.println("Хотите изменить год издания книги? Введите 'да' или 'нет'");
+        String answerForYear = scanner.nextLine();
+        if (answerForYear.equalsIgnoreCase("да")) {
+            System.out.println("Введите новый год издания книги:");
+            year = scanner.nextInt();
+        }
+        scanner.close();
+
+        if (answerForTitle.equalsIgnoreCase("да") && answerForYear.equalsIgnoreCase("да")) {
+            updateBookQuery = String.format("UPDATE books SET title = '%s', published_year = %d WHERE id = %d", title, year, id);
+        } else if (answerForTitle.equalsIgnoreCase("да")) {
+            updateBookQuery = String.format("UPDATE books SET title = '%s' WHERE id = %d", title, year, id);
+        } else if (answerForYear.equalsIgnoreCase("да")) {
+            updateBookQuery = String.format("UPDATE books SET published_year = %d WHERE id = %d", title, year, id);
+        }
+
+        if (updateBookQuery != null) {
+            int status = statement.executeUpdate(updateBookQuery);
+
+            if (status != 0) {
+                System.out.printf("Информация о книге с id: %d успешно обновлена!%n", id);
+            } else {
+                System.out.printf("Ошибка! Книги с id: %d нет в базе данных!%n", id);
+            }
+        }
+    }
+
+    public void deleteBookById(int id) throws SQLException {
+
+        int status = statement.executeUpdate("DELETE FROM books WHERE Id = " + id);
+
+        if (status != 0) {
+            System.out.printf("Книга с id: %d успешно удалена!%n", id);
+        } else {
+            System.out.printf("Ошибка! Книги с id: %d нет в базе данных!%n", id);
+        }
     }
 
     public <E> void printInfo(List<E> list) {
