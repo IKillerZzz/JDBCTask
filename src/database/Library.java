@@ -1,12 +1,12 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Library {
     private Connection connection;
+    private Statement statement;
     private static String createTableAuthors = "CREATE TABLE IF NOT EXISTS authors " +
             "(id SERIAL NOT NULL, " +
             " first_name VARCHAR(30), " +
@@ -40,7 +40,7 @@ public class Library {
 
     public Library(Connection connection) throws SQLException {
         this.connection = connection;
-        Statement statement = connection.createStatement();
+        this.statement = connection.createStatement();
 
         statement.executeUpdate(createTableAuthors);
         statement.executeUpdate(createTableBooks);
@@ -72,5 +72,52 @@ public class Library {
         preparedStatement.setString(2, last_name);
         preparedStatement.setString(3, email);
         preparedStatement.executeUpdate();
+    }
+
+    public List<Books> getAllBooks() throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM books");
+        List<Books> list = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String title = resultSet.getString("title");
+            int author_id = resultSet.getInt("author_id");
+            int published_year = resultSet.getInt("published_year");
+            list.add(new Books(id, title, author_id, published_year));
+        }
+        printInfo(list);
+        return list;
+    }
+
+    public List<Readers> getAllReaders() throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM readers");
+        List<Readers> list = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String first_name = resultSet.getString("first_name");
+            String last_name = resultSet.getString("last_name");
+            String email = resultSet.getString("email");
+            list.add(new Readers(id, first_name, last_name, email));
+        }
+        printInfo(list);
+        return list;
+    }
+
+    public List<Authors> getAllAuthors() throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
+        List<Authors> list = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String first_name = resultSet.getString("first_name");
+            String last_name = resultSet.getString("last_name");
+            list.add(new Authors(id, first_name, last_name));
+        }
+        printInfo(list);
+        return list;
+    }
+
+    public <E> void printInfo(List<E> list) {
+        for (E element : list) {
+            System.out.println(element);
+        }
     }
 }
