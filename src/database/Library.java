@@ -49,28 +49,28 @@ public class Library {
         statement.executeUpdate(createTableBorrowing);
     }
 
-    public void addNewAuthor(String first_name, String last_name) throws SQLException {
+    public void addNewAuthor(String firstName, String lastName) throws SQLException {
         String insertIntoAuthors = "INSERT INTO authors (first_name, last_name) Values (?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertIntoAuthors);
-        preparedStatement.setString(1, first_name);
-        preparedStatement.setString(2, last_name);
+        preparedStatement.setString(1, firstName);
+        preparedStatement.setString(2, lastName);
         preparedStatement.executeUpdate();
     }
 
-    public void addNewBook(String title, int  author_id, int published_year) throws SQLException {
+    public void addNewBook(String title, int  authorId, int publishedYear) throws SQLException {
         String insertIntoBooks = "INSERT INTO books (title, author_id, published_year) Values (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertIntoBooks);
         preparedStatement.setString(1, title);
-        preparedStatement.setInt(2, author_id);
-        preparedStatement.setInt(3, published_year);
+        preparedStatement.setInt(2, authorId);
+        preparedStatement.setInt(3, publishedYear);
         preparedStatement.executeUpdate();
     }
 
-    public void addNewReader(String first_name, String last_name, String  email) throws SQLException {
+    public void addNewReader(String firstName, String lastName, String  email) throws SQLException {
         String insertIntoReaders = "INSERT INTO readers (first_name, last_name, email) Values (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertIntoReaders);
-        preparedStatement.setString(1, first_name);
-        preparedStatement.setString(2, last_name);
+        preparedStatement.setString(1, firstName);
+        preparedStatement.setString(2, lastName);
         preparedStatement.setString(3, email);
         preparedStatement.executeUpdate();
     }
@@ -81,9 +81,9 @@ public class Library {
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
-            int author_id = resultSet.getInt("author_id");
-            int published_year = resultSet.getInt("published_year");
-            list.add(new Books(id, title, author_id, published_year));
+            int authorId = resultSet.getInt("author_id");
+            int publishedYear = resultSet.getInt("published_year");
+            list.add(new Books(id, title, authorId, publishedYear));
         }
         printInfo(list);
         return list;
@@ -94,10 +94,10 @@ public class Library {
         List<Readers> list = new ArrayList<>();
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
-            String first_name = resultSet.getString("first_name");
-            String last_name = resultSet.getString("last_name");
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
             String email = resultSet.getString("email");
-            list.add(new Readers(id, first_name, last_name, email));
+            list.add(new Readers(id, firstName, lastName, email));
         }
         printInfo(list);
         return list;
@@ -108,9 +108,9 @@ public class Library {
         List<Authors> list = new ArrayList<>();
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
-            String first_name = resultSet.getString("first_name");
-            String last_name = resultSet.getString("last_name");
-            list.add(new Authors(id, first_name, last_name));
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            list.add(new Authors(id, firstName, lastName));
         }
         printInfo(list);
         return list;
@@ -167,11 +167,11 @@ public class Library {
         }
     }
 
-    public void addNewAuthorAndBook(String first_name, String last_name, String title, int  author_id, int published_year) throws SQLException {
+    public void addNewAuthorAndBook(String firstName, String lastName, String title, int  authorId, int publishedYear) throws SQLException {
         try{
             connection.setAutoCommit(false);
-            addNewAuthor(first_name, last_name);
-            addNewBook(title, author_id, published_year);
+            addNewAuthor(firstName, lastName);
+            addNewBook(title, authorId, publishedYear);
             System.out.println("Транзакция успешно завершена!");
             connection.commit();
         }
@@ -190,9 +190,9 @@ public class Library {
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
-            int author_id = resultSet.getInt("author_id");
-            int published_year = resultSet.getInt("published_year");
-            list.add(new Books(id, title, author_id, published_year));
+            int authorId = resultSet.getInt("author_id");
+            int publishedYear = resultSet.getInt("published_year");
+            list.add(new Books(id, title, authorId, publishedYear));
         }
         printInfo(list);
         return list;
@@ -209,9 +209,9 @@ public class Library {
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
-            int author_id = resultSet.getInt("author_id");
-            int published_year = resultSet.getInt("published_year");
-            list.add(new Books(id, title, author_id, published_year));
+            int authorId = resultSet.getInt("author_id");
+            int publishedYear = resultSet.getInt("published_year");
+            list.add(new Books(id, title, authorId, publishedYear));
         }
         printInfo(list);
         return list;

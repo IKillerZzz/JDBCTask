@@ -4,25 +4,25 @@ import java.sql.Date;
 
 public class Borrowing {
     private int id;
-    private int reader_id;
-    private int book_id;
-    private Date borrowed_date;
+    private int readerId;
+    private int bookId;
+    private Date borrowedDate;
     boolean isReturned;
 
-    public Borrowing(int id, int reader_id, int book_id, Date borrowed_date, boolean isReturned) {
+    public Borrowing(int id, int readerId, int bookId, Date borrowedDate, boolean isReturned) {
         this.id = id;
-        this.reader_id = reader_id;
-        this.book_id = book_id;
-        this.borrowed_date = borrowed_date;
+        this.readerId = readerId;
+        this.bookId = bookId;
+        this.borrowedDate = borrowedDate;
         this.isReturned = false;
     }
 
     @Override
     public String toString() {
         return "id: " + id +
-                ", reader_id: " + reader_id +
-                ", book_id: " + book_id +
-                ", borrowed_date: " + borrowed_date.toString() +
+                ", reader_id: " + readerId +
+                ", book_id: " + bookId +
+                ", borrowed_date: " + borrowedDate.toString() +
                 ", isReturned: " + isReturned;
     }
 }
